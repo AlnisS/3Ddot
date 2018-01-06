@@ -1,0 +1,12 @@
+final float SCORE_SIZE = 20; //vertical size of square counts for each player
+final float SCORE_HI = 10; //horizontal inset inward for player scores
+final float SCORE_VI = 25; //vertical inset inward for player scores
+final color P1_COLOR = color(0, 0, 255); //player 1 color
+final color P2_COLOR = color(0, 255, 0); //player 2 color
+final color SEG_ON = color(255, 255, 255); //color for placed segment
+final color SEG_OFF = color(127, 127, 127); //color for unplaced segment
+final float SSTART = -.8; //square start in cube space
+final float SEND = -.2; //square end in cube space
+final float CUBE_SIZE = 100; //cube size, world units per cube unit
+final float CAM_LENGTH = 200; //camera length
+final float RF = .5; //rotation speed factor for mouse
