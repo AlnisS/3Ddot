@@ -22,6 +22,29 @@ void addConnectionToDraw(int x, int y, int z, int d, boolean t) {
   Segment tmp = new Segment(x1, y1, z1, x2, y2, z2, c);
   if(!((z==2&&d==2)||(y==2&&d==1)||(x==2&&d==0))) rq.add(tmp);
 }
+void addCursorToDraw(float x, float y, float z, int d, boolean e, player p) {
+  float x1=x-CCO-1;
+  float x2=x+CCO-1;
+  float y1=y-CCO-1;
+  float y2=y+CCO-1;
+  float z1=z-CCO-1;
+  float z2=z+CCO-1;
+  color c = p==player.P1 ? P1_COLOR : P2_COLOR;
+  rq.add(new Segment(x1, y1, z1, x2, y1, z1, c));
+  rq.add(new Segment(x2, y1, z1, x2, y2, z1, c));
+  rq.add(new Segment(x2, y2, z1, x1, y2, z1, c));
+  rq.add(new Segment(x1, y2, z1, x1, y1, z1, c));
+  
+  rq.add(new Segment(x1, y1, z2, x2, y1, z2, c));
+  rq.add(new Segment(x2, y1, z2, x2, y2, z2, c));
+  rq.add(new Segment(x2, y2, z2, x1, y2, z2, c));
+  rq.add(new Segment(x1, y2, z2, x1, y1, z2, c));
+  
+  rq.add(new Segment(x1, y1, z1, x1, y1, z2, c));
+  rq.add(new Segment(x2, y1, z1, x2, y1, z2, c));
+  rq.add(new Segment(x2, y2, z1, x2, y2, z2, c));
+  rq.add(new Segment(x1, y2, z1, x1, y2, z2, c));
+}
 void addSquareToDraw(int x, int y, int z, int d, player p) {
   if(p == player.NP) return;
   color c;
@@ -47,12 +70,13 @@ void addSquareToDraw(int x, int y, int z, int d, player p) {
             rq.add(new Segment(x2, y1, z2, x1, y1, z2, c));
             rq.add(new Segment(x1, y1, z2, x1, y1, z1, c));
             break;
-    case 2: x1=-1+x; y1=SSTART+y; z1=SSTART+y;
-            y2=SEND+y; z2=SEND+y;
+    case 2: x1=-1+x; y1=SSTART+y; z1=SSTART+z;
+            y2=SEND+y; z2=SEND+z;
             rq.add(new Segment(x1, y1, z1, x1, y2, z1, c));
             rq.add(new Segment(x1, y2, z1, x1, y2, z2, c));
             rq.add(new Segment(x1, y2, z2, x1, y1, z2, c));
             rq.add(new Segment(x1, y1, z2, x1, y1, z1, c));
+            //println(x1, y1, z1, x1, y2, z2);
             break;
     default: break;
   }
@@ -98,8 +122,8 @@ void renderQueue(float xr, float zr) {
     tz = tmp.z2;
     tmp.y2 = ty*cos(xr) - tz*sin(xr);
     tmp.z2 = ty*sin(xr) + tz*cos(xr);
-    tmp.y1 += 300;
-    tmp.y2 += 300;
+    tmp.y1 += CAM_DIST;
+    tmp.y2 += CAM_DIST;
     stroke(tmp.c);
     line(width/2+tmp.x1/tmp.y1*CAM_LENGTH, height/2+tmp.z1/tmp.y1*CAM_LENGTH, width/2+tmp.x2/tmp.y2*CAM_LENGTH, height/2+tmp.z2/tmp.y2*CAM_LENGTH);
     rq.remove(0);

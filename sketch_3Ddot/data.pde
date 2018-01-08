@@ -13,6 +13,7 @@ void setupData() {
   p2s = 0;
 }
 void setupTestData() {
+  /*
   connections[0][0][0][0] = true;
   connections[0][1][0][0] = true;
   connections[0][0][0][1] = true;
@@ -27,37 +28,20 @@ void setupTestData() {
   connections[0][0][1][1] = true;
   connections[0][0][0][2] = true;
   connections[0][1][0][2] = true;
-
+  */
+  iterate();
   updateField(player.P1);
 }
-float lastmx;
-float lastmy;
-float xr;
-float zr;
-boolean lfmp; //last frame mouse pressed?
-float[] getRotation() {
-  if(!mousePressed) {
-    if(lfmp) {
-      xr+=RF*radians(mouseX-lastmx);
-      zr-=RF*radians(mouseY-lastmy);
-    }
-    lfmp = false;
-  }
-  float[] result = new float[] {xr, zr};
-  if(mousePressed) {
-    if(lfmp) {
-      result[0] = xr+RF*radians(mouseX-lastmx);
-      result[1] = zr-RF*radians(mouseY-lastmy);
-    } else {
-      lfmp = true;
-      lastmx = mouseX;
-      lastmy = mouseY;
-      result[0] = xr+RF*radians(mouseX-lastmx);
-      result[1] = zr-RF*radians(mouseY-lastmy);
+void iterate() {
+  for(int i=0; i<=2; i++) {
+    for(int j=0; j<=2; j++) {
+      for(int k=0; k<=1; k++) {
+        connections[i][j][k][2] = true;
+        connections[i][k][j][1] = true;
+        connections[k][i][j][0] = true;
+      }
     }
   }
-  result[1] = min(PI/2, max(-PI/2, result[1]));
-  return result;
 }
 boolean[] getConnections(int x, int y, int z) {
   boolean[] r = new boolean[6];
@@ -101,6 +85,8 @@ void ups(int x, int y, int z, player p) { //(move around array and check others 
   }
   if((connections[x][y][z][1] && connections[x][y][z][2]) && (connections[x][y][z+1][1] && connections[x][y+1][z][2]) && squares[x][y][z][2]==player.NP) {
       squares[x][y][z][2] = p;
+      //println(connections[x][y][z][1], connections[x][y][z][2], connections[x][y][z+1][1], connections[x][y+1][z][2]);
+      println(x, y, z, p);
     addScore(p);
   }
 }
