@@ -42,13 +42,15 @@ void setCursorBTarg() {
     default: break;
   }
 }
-void bumpCursor() {
-  if(ctargx==2&&cd==0) cd=3;
-  if(ctargy==2&&cd==1) cd=4;
-  if(ctargz==2&&cd==2) cd=5;
-  if(ctargx==0&&cd==3) cd=0;
-  if(ctargy==0&&cd==4) cd=1;
-  if(ctargz==0&&cd==5) cd=2;
+boolean bumpCursor() {
+  boolean r = false;
+  if(ctargx==2&&cd==0) {cd=3; r=true;}
+  if(ctargy==2&&cd==1) {cd=4; r=true;}
+  if(ctargz==2&&cd==2) {cd=5; r=true;}
+  if(ctargx==0&&cd==3) {cd=0; r=true;}
+  if(ctargy==0&&cd==4) {cd=1; r=true;}
+  if(ctargz==0&&cd==5) {cd=2; r=true;}
+  return r;
 }
 void clipCursor() {
   ctargx = max(0, min(2, ctargx));
@@ -63,8 +65,18 @@ void keyPressed() {
     case 'w': if(pm) cd=1; else ctargy++; break;
     case 'q': if(pm) cd=2; else ctargz++; break;
     case 'e': if(pm) cd=5; else ctargz--; break;
+    case 'j': cd=3; break;
+    case 'l': cd=0; break;
+    case 'k': cd=4; break;
+    case 'i': cd=1; break;
+    case 'u': cd=2; break;
+    case 'o': cd=5; break;
     case ' ': pm=!pm; break;
-    case '\n': if(pm) {
+    case 'g': zrv+=.05; break;
+    case 't': zrv-=.05; break;
+    case 'f': xrv-=.05; break;
+    case 'h': xrv+=.05; break;
+    case '\n': if(pm||ENTER_ALWAYS_OK) {
                  //only switch turn if valid move is made which does not make a new square
                  if(place(ctargx, ctargy, ctargz, cd, curp) && !updateField(curp)) {
                    curp=(curp==player.P1)?player.P2:player.P1;

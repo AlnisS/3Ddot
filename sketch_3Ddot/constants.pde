@@ -15,3 +15,4 @@ final float CAM_DIST = 800; //distance from cube center
 final float RF = .5; //rotation speed factor for mouse
 final float CCO = .1; //cursor cube offset from center
 final float SPIN_FRICTION = .92; //spin friction for spinning the cube with inertia
+final boolean ENTER_ALWAYS_OK = true; //whether enter can always be used to place segments

@@ -32,6 +32,7 @@ void setupTestData() {
   //iterate();
   updateField(player.P1);
 }
+//tries to place segment at coords/direction and returns whether it could/did do it
 boolean place(int x, int y, int z, int d, player p) {
   switch(d) {
     case 3: x--; d=0; break;
@@ -67,7 +68,7 @@ boolean[] getConnections(int x, int y, int z) {
   if(z>0) r[5] = connections[x][y][z-1][0];
   return r;
 }
-boolean updateField(player p) {
+boolean updateField(player p) { //checks all locations for squares, returns whether new square found
   boolean r = false;
   for(int i=0; i<3; i++) {
     for(int j=0; j<3; j++) {
@@ -89,7 +90,7 @@ void initSquares() {
     }
   }
 }
-//update positive squares
+//update positive squares, returns whether a new one was found
 boolean ups(int x, int y, int z, player p) { //(move around array and check others iff there are connections going in those directions
   boolean r = false;
   if((connections[x][y][z][0] && connections[x][y][z][1]) && (connections[x][y+1][z][0] && connections[x+1][y][z][1]) && squares[x][y][z][0]==player.NP) {
