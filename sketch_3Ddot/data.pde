@@ -29,8 +29,22 @@ void setupTestData() {
   connections[0][0][0][2] = true;
   connections[0][1][0][2] = true;
   */
-  iterate();
+  //iterate();
   updateField(player.P1);
+}
+boolean place(int x, int y, int z, int d, player p) {
+  switch(d) {
+    case 3: x--; d=0; break;
+    case 4: y--; d=1; break;
+    case 5: z--; d=2; break;
+    default: break;
+  }
+  if(connections[x][y][z][d]) {
+    return false;
+  } else {
+    connections[x][y][z][d]=true;
+  }
+  return true;
 }
 void iterate() {
   for(int i=0; i<=2; i++) {
@@ -53,14 +67,16 @@ boolean[] getConnections(int x, int y, int z) {
   if(z>0) r[5] = connections[x][y][z-1][0];
   return r;
 }
-void updateField(player p) {
+boolean updateField(player p) {
+  boolean r = false;
   for(int i=0; i<3; i++) {
     for(int j=0; j<3; j++) {
       for(int k=0; k<3; k++) {
-        ups(i, j, k, p);
+        if(ups(i, j, k, p)) r=true;
       }
     }
   }
+  return r;
 }
 void initSquares() {
   for(int i=0; i<3; i++) {
@@ -74,21 +90,24 @@ void initSquares() {
   }
 }
 //update positive squares
-void ups(int x, int y, int z, player p) { //(move around array and check others iff there are connections going in those directions
+boolean ups(int x, int y, int z, player p) { //(move around array and check others iff there are connections going in those directions
+  boolean r = false;
   if((connections[x][y][z][0] && connections[x][y][z][1]) && (connections[x][y+1][z][0] && connections[x+1][y][z][1]) && squares[x][y][z][0]==player.NP) {
       squares[x][y][z][0] = p;
     addScore(p);
+    r=true;
   }
   if((connections[x][y][z][0] && connections[x][y][z][2]) && (connections[x][y][z+1][0] && connections[x+1][y][z][2]) && squares[x][y][z][1]==player.NP) {
       squares[x][y][z][1] = p;
     addScore(p);
+    r=true;
   }
   if((connections[x][y][z][1] && connections[x][y][z][2]) && (connections[x][y][z+1][1] && connections[x][y+1][z][2]) && squares[x][y][z][2]==player.NP) {
       squares[x][y][z][2] = p;
-      //println(connections[x][y][z][1], connections[x][y][z][2], connections[x][y][z+1][1], connections[x][y+1][z][2]);
-      println(x, y, z, p);
     addScore(p);
+    r=true;
   }
+  return r;
 }
 void addScore(player p) {
   if(p == player.P1) {
