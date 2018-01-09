@@ -22,7 +22,7 @@ void addConnectionToDraw(int x, int y, int z, int d, boolean t) {
   Segment tmp = new Segment(x1, y1, z1, x2, y2, z2, c);
   if(!((z==2&&d==2)||(y==2&&d==1)||(x==2&&d==0))) rq.add(tmp);
 }
-void addCursorToDraw(float x, float y, float z, int d, boolean e, player p) {
+void addCursorToDraw(float x, float y, float z, float xb, float yb, float zb, boolean e, player p) {
   float x1=x-CCO-1;
   float x2=x+CCO-1;
   float y1=y-CCO-1;
@@ -31,17 +31,14 @@ void addCursorToDraw(float x, float y, float z, int d, boolean e, player p) {
   float z2=z+CCO-1;
   color c = p==player.P1 ? P1_COLOR : P2_COLOR;
   addCube(x1, y1, z1, x2, y2, z2, c);
-  if(e) {
-    switch(d) {
-      case 0: addCube(x1+1, y1, z1, x2+1, y2, z2, OTHER_COLOR); break;
-      case 1: addCube(x1, y1+1, z1, x2, y2+1, z2, OTHER_COLOR); break;
-      case 2: addCube(x1, y1, z1+1, x2, y2, z2+1, OTHER_COLOR); break;
-      case 3: addCube(x1-1, y1, z1, x2-1, y2, z2, OTHER_COLOR); break;
-      case 4: addCube(x1, y1-1, z1, x2, y2-1, z2, OTHER_COLOR); break;
-      case 5: addCube(x1, y1, z1-1, x2, y2, z2-1, OTHER_COLOR); break;
-      default: break;
-    }
-  }
+  c=e?OTHER_COLOR:OTHER_COLOR_DARK;
+  x1=xb-CCO-1;
+  x2=xb+CCO-1;
+  y1=yb-CCO-1;
+  y2=yb+CCO-1;
+  z1=zb-CCO-1;
+  z2=zb+CCO-1;
+  addCube(x1, y1, z1, x2, y2, z2, c);
 }
 void addCube(float x1, float y1, float z1, float x2, float y2, float z2, color c) {
   rq.add(new Segment(x1, y1, z1, x2, y1, z1, c));//top
