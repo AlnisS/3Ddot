@@ -10,6 +10,12 @@ void render(float xr, float zr) {
   textSize(SCORE_SIZE);
   fill(P1_COLOR); text(p1s, SCORE_HI, SCORE_VI);
   fill(P2_COLOR); text(p2s, width-textWidth(str(p2s))-SCORE_HI, SCORE_VI);
+  renderAxes(xr, zr);
+}
+void renderAxes(float xr, float zr) {
+  renderSegment(new Segment(0, 0, 0, 20, 0, 0, color(255, 255, 255)), xr, zr, width/2, 20);
+  renderSegment(new Segment(0, 0, 0, 0, 20, 0, color(255, 255, 255)), xr, zr, width/2, 20);
+  renderSegment(new Segment(0, 0, 0, 0, 0, -20, color(255, 255, 255)), xr, zr, width/2, 20);
 }
 void addConnectionToDraw(int x, int y, int z, int d, boolean t) {
   float x1 = x-1;
@@ -32,12 +38,12 @@ void addCursorToDraw(float x, float y, float z, float xb, float yb, float zb, bo
   color c = p==player.P1 ? P1_COLOR : P2_COLOR;
   addCube(x1, y1, z1, x2, y2, z2, c);
   c=e?OTHER_COLOR:OTHER_COLOR_DARK;
-  x1=xb-CCO-1;
-  x2=xb+CCO-1;
-  y1=yb-CCO-1;
-  y2=yb+CCO-1;
-  z1=zb-CCO-1;
-  z2=zb+CCO-1;
+  x1=xb-CCO/2-1;
+  x2=xb+CCO/2-1;
+  y1=yb-CCO/2-1;
+  y2=yb+CCO/2-1;
+  z1=zb-CCO/2-1;
+  z2=zb+CCO/2-1;
   addCube(x1, y1, z1, x2, y2, z2, c);
 }
 void addCube(float x1, float y1, float z1, float x2, float y2, float z2, color c) {
@@ -111,7 +117,12 @@ void renderQueue(float xr, float zr) {
     tmp.x2 *= CUBE_SIZE;
     tmp.y2 *= CUBE_SIZE;
     tmp.z2 *= CUBE_SIZE;
-    float tx = tmp.x1;
+    renderSegment(tmp, xr, zr, width/2, height/2);
+    rq.remove(0);
+  }
+}
+void renderSegment(Segment tmp, float xr, float zr, float cntx, float cnty) {
+  float tx = tmp.x1;
     float ty = tmp.y1;
     float tz = tmp.z1;
     tmp.x1 = tx*cos(zr) - ty*sin(zr);
@@ -134,7 +145,5 @@ void renderQueue(float xr, float zr) {
     tmp.y1 += CAM_DIST;
     tmp.y2 += CAM_DIST;
     stroke(tmp.c);
-    line(width/2+tmp.x1/tmp.y1*CAM_LENGTH, height/2+tmp.z1/tmp.y1*CAM_LENGTH, width/2+tmp.x2/tmp.y2*CAM_LENGTH, height/2+tmp.z2/tmp.y2*CAM_LENGTH);
-    rq.remove(0);
-  }
+    line(cntx+tmp.x1/tmp.y1*CAM_LENGTH, cnty+tmp.z1/tmp.y1*CAM_LENGTH, cntx+tmp.x2/tmp.y2*CAM_LENGTH, cnty+tmp.z2/tmp.y2*CAM_LENGTH);
 }
