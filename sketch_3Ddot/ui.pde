@@ -11,7 +11,7 @@ float ccurz = 0;
 float ccurxb = 0;
 float ccuryb = 0;
 float ccurzb = 0;
-boolean pm=false; //placemode
+boolean pm=true; //placemode
 player curp = player.P1;
 void updateUI() {
   updateCursor();
@@ -59,6 +59,7 @@ void clipCursor() {
 }
 void keyPressed() {
   switch(key) {
+    /*
     case 'a': if(pm) cd=3; else ctargx--; break;
     case 'd': if(pm) cd=0; else ctargx++; break;
     case 's': if(pm) cd=4; else ctargy--; break;
@@ -71,7 +72,14 @@ void keyPressed() {
     case 'i': cd=1; break;
     case 'u': cd=2; break;
     case 'o': cd=5; break;
-    case ' ': pm=!pm; break;
+    */
+    case 'a': if(cd!=3) cd=3; else ctargx--; break;
+    case 'd': if(cd!=0) cd=0; else ctargx++; break;
+    case 's': if(cd!=4) cd=4; else ctargy--; break;
+    case 'w': if(cd!=1) cd=1; else ctargy++; break;
+    case 'q': if(cd!=2) cd=2; else ctargz++; break;
+    case 'e': if(cd!=5) cd=5; else ctargz--; break;
+    //case ' ': pm=!pm; break;
     case 'g': zrv+=.05; break;
     case 't': zrv-=.05; break;
     case 'f': xrv-=.05; break;
