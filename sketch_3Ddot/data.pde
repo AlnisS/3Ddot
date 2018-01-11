@@ -29,7 +29,7 @@ void setupTestData() {
   connections[0][0][0][2] = true;
   connections[0][1][0][2] = true;
   */
-  //iterate();
+  iterate();
   updateField(player.P1);
 }
 //tries to place segment at coords/direction and returns whether it could/did do it
