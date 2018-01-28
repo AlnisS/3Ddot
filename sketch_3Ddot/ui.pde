@@ -12,9 +12,67 @@ float ccurxb = 0;
 float ccuryb = 0;
 float ccurzb = 0;
 boolean pm=true; //placemode
+float[] control = {0, 0};
+int mouseState = 0; //up, down, this frame up, this frame down
 player curp = player.P1;
 void updateUI() {
+  updateMouse();
   updateCursor();
+}
+void updateMouse() {
+  if(!mousePressed) {
+    if(lfmp) {
+      mouseState = 2;
+    } else {
+      mouseState = 0;
+    }
+    lfmp = false;
+  }
+  if(mousePressed) {
+    if(lfmp) {
+      mouseState = 1;
+    } else {
+      mouseState = 3;
+      lastmx = mouseX;
+      lastmy = mouseY;
+    }
+    lfmp = true;
+  }
+  if(lastmy <= height*2/3) {
+    control = getRotation(mouseState);
+  } else {
+    control = getRotation(0);
+    if(lastmx >= width/2 && mouseState == 2 && abs(mouseX-lastmx) < 30) {
+      if(lastmy-mouseY >= 10) {
+        keypressHandler('e');
+      } else if(lastmy-mouseY <= -10) {
+        keypressHandler('q');
+      } else {
+        keypressHandler('\n');
+      }
+    }
+    if(lastmx < width/2 && mouseState == 2 && sqrt(sq(mouseX-lastmx)+sq(mouseY-lastmy)) >= 10) {
+      float[] tmp;
+      float curmin = PI;
+      int curmind = -1;
+      tmp = returnRenderSegment(new Segment(0, 0, 0, 1, 0, 0, 0), control[0], control[1], 0, 0);
+      float xpd = abs(radDiff(ptsToRad(0, 0, tmp[2], tmp[3]), ptsToRad(lastmx, lastmy, mouseX, mouseY)));
+      if(xpd<curmin) {curmin=xpd; curmind=0;}
+      float xnd = PI-xpd;
+      if(xnd<curmin) {curmin=xnd; curmind=1;}
+      tmp = returnRenderSegment(new Segment(0, 0, 0, 0, 1, 0, 0), control[0], control[1], 0, 0);
+      float ypd = abs(radDiff(ptsToRad(0, 0, tmp[2], tmp[3]), ptsToRad(lastmx, lastmy, mouseX, mouseY)));
+      if(ypd<curmin) {curmin=ypd; curmind=2;}
+      float ynd = PI-ypd;
+      if(ynd<curmin) {curmin=ynd; curmind=3;}
+      switch(curmind) {
+        case 0: keypressHandler('d'); break;
+        case 1: keypressHandler('a'); break;
+        case 2: keypressHandler('s'); break;
+        case 3: keypressHandler('w'); break;
+      }
+    }
+  }
 }
 void updateCursor() {
   ccurx = .6*ctargx + .4*ccurx;
@@ -57,8 +115,8 @@ void clipCursor() {
   ctargy = max(0, min(2, ctargy));
   ctargz = max(0, min(2, ctargz));
 }
-void keyPressed() {
-  switch(key) {
+void keypressHandler(char k) {
+  switch(k) {
     /*
     case 'a': if(pm) cd=3; else ctargx--; break;
     case 'd': if(pm) cd=0; else ctargx++; break;
@@ -96,6 +154,9 @@ void keyPressed() {
   bumpCursor();
   clipCursor();
 }
+void keyPressed() {
+  keypressHandler(key);
+}
 float lastmx;
 float lastmy;
 float xr;
@@ -105,30 +166,28 @@ float zrl;
 float xrv;
 float zrv;
 boolean lfmp; //last frame mouse pressed?
-float[] getRotation() {
-  if(!mousePressed) {
-    if(lfmp) {
-      xr+=RF*radians(mouseX-lastmx);
-      zr-=RF*radians(mouseY-lastmy);
-    }
-    lfmp = false;
-    xr+=xrv;
-    zr+=zrv;
-    zr=min(PI/2, max(-PI/2, zr));
+float[] getRotation(int in) {
+  float[] result = new float[2];
+  switch(in) {
+    case 0: xr+=xrv;
+            zr+=zrv;
+            zr=min(PI/2, max(-PI/2, zr));
+            result = new float[] {xr, zr};
+            break;
+    case 1: result[0] = xr+RF*radians(mouseX-lastmx);
+            result[1] = zr-RF*radians(mouseY-lastmy);
+            break;
+    case 3: result[0] = xr+RF*radians(mouseX-lastmx);
+            result[1] = zr-RF*radians(mouseY-lastmy);
+            break;
+    case 2: xr+=RF*radians(mouseX-lastmx);
+            zr-=RF*radians(mouseY-lastmy);
+            result = new float[] {xr, zr};
+            break;
   }
-  float[] result = new float[] {xr, zr};
-  if(mousePressed) {
-    if(lfmp) {
-      result[0] = xr+RF*radians(mouseX-lastmx);
-      result[1] = zr-RF*radians(mouseY-lastmy);
-    } else {
-      lfmp = true;
-      lastmx = mouseX;
-      lastmy = mouseY;
-      result[0] = xr+RF*radians(mouseX-lastmx);
-      result[1] = zr-RF*radians(mouseY-lastmy);
-    }
-  }
+  //println(lastmx, lastmy, mouseX, mouseY);
+  //println(in);
+  //float[] result = new float[] {xr, zr};
   result[1] = min(PI/2, max(-PI/2, result[1]));
   xrv=result[0]-xrl;
   zrv=result[1]-zrl;

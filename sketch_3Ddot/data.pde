@@ -29,7 +29,7 @@ void setupTestData() {
   connections[0][0][0][2] = true;
   connections[0][1][0][2] = true;
   */
-  iterate();
+  //iterate();
   updateField(player.P1);
 }
 //tries to place segment at coords/direction and returns whether it could/did do it
@@ -116,4 +116,29 @@ void addScore(player p) {
   } else if(p == player.P2) {
     p2s++;
   } else println("warning: score adding attempt to no player");
+}
+boolean needsSplit(int x, int y, int z) {
+  return true;/*
+  for(int d = -1; d < 6; d++) {
+    int[] r = dToOffsets(d);
+    if(ctargx==x+r[0]&&ctargy==y+r[1]&&ctargz==z+r[2]) {
+      return true;
+    }
+    if(ctargxb==x+r[0]&&ctargyb==y+r[1]&&ctargzb==z+r[2]) {
+      return true;
+    }
+  }
+  return false;*/
+}
+int[] dToOffsets(int d) {
+  int[] r = new int[3];
+  switch(d) {
+    case 0: r[0]=1; return r;
+    case 1: r[1]=1; return r;
+    case 2: r[2]=1; return r;
+    case 3: r[0]=-1; return r;
+    case 4: r[1]=-1; return r;
+    case 5: r[2]=-1; return r;
+    default: return r;
+  }
 }

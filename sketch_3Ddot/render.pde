@@ -39,7 +39,12 @@ void addConnectionToDraw(int x, int y, int z, int d, boolean t) {
   float z2 = d==2 ? z : z-1;
   color c = t ? SEG_ON : SEG_OFF;
   if(!((z==2&&d==2)||(y==2&&d==1)||(x==2&&d==0))){
-    addSplitSegmentToDraw(new Segment(x1, y1, z1, x2, y2, z2, c));
+    int[] tof = dToOffsets(d);
+    if(needsSplit(x, y, z)||needsSplit(x+tof[0], y+tof[1], z+tof[2])) {
+      addSplitSegmentToDraw(new Segment(x1, y1, z1, x2, y2, z2, c));
+    } else {
+      rq.add(new Segment(x1, y1, z1, x2, y2, z2, c));
+    }
   }
 }
 void addSplitSegmentToDraw(Segment t) {
@@ -74,18 +79,18 @@ void addCursorToDraw(float x, float y, float z, float xb, float yb, float zb, bo
   addCube(x1, y1, z1, x2, y2, z2, c);
 }
 void addCube(float x1, float y1, float z1, float x2, float y2, float z2, color c) {
-  addSplitSegmentToDraw(new Segment(x1, y1, z1, x2, y1, z1, c));//top
-  addSplitSegmentToDraw(new Segment(x2, y1, z1, x2, y2, z1, c));
-  addSplitSegmentToDraw(new Segment(x2, y2, z1, x1, y2, z1, c));
-  addSplitSegmentToDraw(new Segment(x1, y2, z1, x1, y1, z1, c));
-  addSplitSegmentToDraw(new Segment(x1, y1, z2, x2, y1, z2, c));//bottom
-  addSplitSegmentToDraw(new Segment(x2, y1, z2, x2, y2, z2, c));
-  addSplitSegmentToDraw(new Segment(x2, y2, z2, x1, y2, z2, c));
-  addSplitSegmentToDraw(new Segment(x1, y2, z2, x1, y1, z2, c));
-  addSplitSegmentToDraw(new Segment(x1, y1, z1, x1, y1, z2, c));//verticals
-  addSplitSegmentToDraw(new Segment(x2, y1, z1, x2, y1, z2, c));
-  addSplitSegmentToDraw(new Segment(x2, y2, z1, x2, y2, z2, c));
-  addSplitSegmentToDraw(new Segment(x1, y2, z1, x1, y2, z2, c));
+  rq.add(new Segment(x1, y1, z1, x2, y1, z1, c));//top
+  rq.add(new Segment(x2, y1, z1, x2, y2, z1, c));
+  rq.add(new Segment(x2, y2, z1, x1, y2, z1, c));
+  rq.add(new Segment(x1, y2, z1, x1, y1, z1, c));
+  rq.add(new Segment(x1, y1, z2, x2, y1, z2, c));//bottom
+  rq.add(new Segment(x2, y1, z2, x2, y2, z2, c));
+  rq.add(new Segment(x2, y2, z2, x1, y2, z2, c));
+  rq.add(new Segment(x1, y2, z2, x1, y1, z2, c));
+  rq.add(new Segment(x1, y1, z1, x1, y1, z2, c));//verticals
+  rq.add(new Segment(x2, y1, z1, x2, y1, z2, c));
+  rq.add(new Segment(x2, y2, z1, x2, y2, z2, c));
+  rq.add(new Segment(x1, y2, z1, x1, y2, z2, c));
 }
 void addSquareToDraw(int x, int y, int z, int d, player p) {
   if(p == player.NP) return;
@@ -136,6 +141,8 @@ void generateQueue() {
   }
 }
 void renderQueue(float xr, float zr) {
+  text(rq.size(), 20, 648);
+
   for(Segment t:rq) {
     Segment tmp = readySegment(t, xr, zr);
     t.d=sqrt(sq((tmp.x1+tmp.x2)/2)+sq((tmp.y1+tmp.y2)/2)+sq((tmp.z1+tmp.z2)/2));
@@ -159,6 +166,14 @@ void renderSegment(Segment t, float xr, float zr, float cntx, float cnty) {
   stroke(tmp.c);
   strokeWeight(2);
   line(cntx+tmp.x1/tmp.y1*CAM_LENGTH, cnty+tmp.z1/tmp.y1*CAM_LENGTH, cntx+tmp.x2/tmp.y2*CAM_LENGTH, cnty+tmp.z2/tmp.y2*CAM_LENGTH);
+}
+float[] returnRenderSegment(Segment t, float xr, float zr, float cntx, float cnty) {
+  Segment tmp = readySegment(t, xr, zr);
+  //println(tmp.x1, tmp.y1, tmp.z1, tmp.x2, tmp.y2, tmp.z2);
+  stroke(tmp.c);
+  strokeWeight(2);
+  float[] r = {cntx+tmp.x1/tmp.y1*CAM_LENGTH, cnty+tmp.z1/tmp.y1*CAM_LENGTH, cntx+tmp.x2/tmp.y2*CAM_LENGTH, cnty+tmp.z2/tmp.y2*CAM_LENGTH};
+  return r;
 }
 Segment readySegment(Segment t, float xr, float zr) {
   Segment tmp = t.copy();
