@@ -16,8 +16,8 @@ void draw() {
   
   int time = millis();
   generateQueue();
-  updateUI();
   background(color(0,0,0));
+  updateUI();
   render(control[1],control[0]);
   fill(color(255, 255, 255));
   frames++;

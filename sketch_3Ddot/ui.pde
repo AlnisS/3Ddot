@@ -55,24 +55,32 @@ void updateMouse() {
       float[] tmp;
       float curmin = PI;
       int curmind = -1;
-      tmp = returnRenderSegment(new Segment(0, 0, 0, 1, 0, 0, 0), control[0], control[1], 0, 0);
-      float xpd = abs(radDiff(ptsToRad(0, 0, tmp[2], tmp[3]), ptsToRad(lastmx, lastmy, mouseX, mouseY)));
+      tmp = returnRenderSegment(new Segment(0, 0, (ccurz-1)*CUBE_SIZE, 100, 0, (ccurz-1)*CUBE_SIZE, 0), control[1], control[0], 0, 0);
+      
+      float xpd = abs(radDiff(ptsToRad(tmp[0], tmp[1], tmp[2], tmp[3]), ptsToRad(lastmx, lastmy, mouseX, mouseY)));
+      println(tmp[2], tmp[3], ptsToRad(tmp[0], tmp[1], tmp[2], tmp[3]), ptsToRad(lastmx, lastmy, mouseX, mouseY));
+      
       if(xpd<curmin) {curmin=xpd; curmind=0;}
       float xnd = PI-xpd;
       if(xnd<curmin) {curmin=xnd; curmind=1;}
-      tmp = returnRenderSegment(new Segment(0, 0, 0, 0, 1, 0, 0), control[0], control[1], 0, 0);
-      float ypd = abs(radDiff(ptsToRad(0, 0, tmp[2], tmp[3]), ptsToRad(lastmx, lastmy, mouseX, mouseY)));
+      tmp = returnRenderSegment(new Segment(0, 0, (ccurz-1)*CUBE_SIZE, 0, 100, (ccurz-1)*CUBE_SIZE, 0), control[1], control[0], 0, 0);
+      println(control[0], control[1]);
+      float ypd = abs(radDiff(ptsToRad(tmp[0], tmp[1], tmp[2], tmp[3]), ptsToRad(lastmx, lastmy, mouseX, mouseY)));
+      println(tmp[2], tmp[3], ptsToRad(tmp[0], tmp[1], tmp[2], tmp[3]), ptsToRad(lastmx, lastmy, mouseX, mouseY));  
       if(ypd<curmin) {curmin=ypd; curmind=2;}
       float ynd = PI-ypd;
       if(ynd<curmin) {curmin=ynd; curmind=3;}
+      println(xpd, xnd, ypd, ynd, curmind);
       switch(curmind) {
         case 0: keypressHandler('d'); break;
         case 1: keypressHandler('a'); break;
-        case 2: keypressHandler('s'); break;
-        case 3: keypressHandler('w'); break;
+        case 2: keypressHandler('w'); break;
+        case 3: keypressHandler('s'); break;
       }
     }
   }
+  renderSegment(new Segment(0, 0, (ccurz-1)*CUBE_SIZE, 200, 0, (ccurz-1)*CUBE_SIZE, color(255, 255, 255)), control[1], control[0], width/2, height/2);
+  renderSegment(new Segment(0, 0, (ccurz-1)*CUBE_SIZE, 0, 200, (ccurz-1)*CUBE_SIZE, color(255, 255, 128)), control[1], control[0], width/2, height/2);
 }
 void updateCursor() {
   ccurx = .6*ctargx + .4*ccurx;
