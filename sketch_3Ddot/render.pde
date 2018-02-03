@@ -141,7 +141,7 @@ void generateQueue() {
   }
 }
 void renderQueue(float xr, float zr) {
-  text(rq.size(), 20, 648);
+  //text(rq.size(), 20, 648);
 
   for(Segment t:rq) {
     Segment tmp = readySegment(t, xr, zr);
