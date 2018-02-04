@@ -1,11 +1,13 @@
 import java.util.Collections;
 void settings() {
-  size(412, 688, P3D); //for chromebook vertical display
+  size(displayWidth, displayHeight, P3D);
   //size(1366, 688);
-//smooth(8);
-  
+  //size(412, 688); //for chromebook vertical display
+  //smooth(8);
 }
 void setup() {
+  SCL = min(((float)(width))/512, ((float)(height))/512);
+  println(width, height, width/412, height/412);
   setupData();
   setupTestData();
   //ups(0, 0, 1, player.P1);
@@ -26,6 +28,7 @@ void draw() {
   
   //println(radDiff(PI/2, ptsToRad(width/2, height/2, mouseX, height-mouseY)), ptsToRad(width/2, height/2, mouseX, height-mouseY));
   //println(ptToRad(width/2, height/2, mouseX, height-mouseY));
+  println(SCL);
 }
 float ptsToRad(float x1, float y1, float x2, float y2) {
   float c = x2<x1?PI:0;

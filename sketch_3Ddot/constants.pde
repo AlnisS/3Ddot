@@ -1,3 +1,4 @@
+float SCL;
 final float SCORE_SIZE = 20; //vertical size of square counts for each player
 final float SCORE_HI = 10; //horizontal inset inward for player scores
 final float SCORE_VI = 25; //vertical inset inward for player scores

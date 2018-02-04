@@ -165,7 +165,7 @@ void renderSegment(Segment t, float xr, float zr, float cntx, float cnty) {
   Segment tmp = readySegment(t, xr, zr);
   stroke(tmp.c);
   strokeWeight(2);
-  line(cntx+tmp.x1/tmp.y1*CAM_LENGTH, cnty+tmp.z1/tmp.y1*CAM_LENGTH, cntx+tmp.x2/tmp.y2*CAM_LENGTH, cnty+tmp.z2/tmp.y2*CAM_LENGTH);
+  line(cntx+SCL*tmp.x1/tmp.y1*CAM_LENGTH, cnty+SCL*tmp.z1/tmp.y1*CAM_LENGTH, cntx+SCL*tmp.x2/tmp.y2*CAM_LENGTH, cnty+SCL*tmp.z2/tmp.y2*CAM_LENGTH);
 }
 float[] returnRenderSegment(Segment t, float xr, float zr, float cntx, float cnty) {
   Segment tmp = readySegment(t, xr, zr);
