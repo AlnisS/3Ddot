@@ -42,6 +42,7 @@ void updateMouse() {
     control = getRotation(mouseState);
   } else {
     control = getRotation(0);
+    /*
     if(lastmx >= width/2 && mouseState == 2 && abs(mouseX-lastmx) < 30) {
       if(lastmy-mouseY >= 10) {
         keypressHandler('e');
@@ -51,7 +52,11 @@ void updateMouse() {
         keypressHandler('\n');
       }
     }
-    if(lastmx < width/2 && mouseState == 2 && sqrt(sq(mouseX-lastmx)+sq(mouseY-lastmy)) >= 10) {
+    */
+    if(mouseState == 2 && sqrt(sq(mouseX-lastmx)+sq(mouseY-lastmy)) <= 10) {
+      keypressHandler('\n');
+    }
+    if(mouseState == 2 && sqrt(sq(mouseX-lastmx)+sq(mouseY-lastmy)) >= 10) {
       float[] tmp;
       float curmin = PI;
       int curmind = -1;
